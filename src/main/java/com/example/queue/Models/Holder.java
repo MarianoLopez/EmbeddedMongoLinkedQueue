@@ -6,6 +6,7 @@
 package com.example.queue.Models;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import org.springframework.data.annotation.Id;
+import org.springframework.data.mongodb.core.mapping.DBRef;
 import org.springframework.data.mongodb.core.mapping.Document;
 /**
  *
@@ -18,6 +19,19 @@ public class Holder {
     private String id;
     private String descripction;
     private boolean state = false;
+    @DBRef
+    private Person person;
+
+    public Person getPerson() {
+        return person;
+    }
+
+    public void setPerson(Person person) {
+        this.person = person;
+    }
+    
+    
+    
 
     public String getId() {
         return id;

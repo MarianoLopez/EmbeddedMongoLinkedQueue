@@ -5,18 +5,13 @@
  */
 package com.example.queue.DAO;
 
-import com.example.queue.Models.Holder;
-import java.util.List;
+import com.example.queue.Models.Person;
 import org.springframework.data.mongodb.repository.MongoRepository;
-
 
 /**
  *
  * @author Mariano
-  https://docs.spring.io/spring-data/data-commons/docs/1.6.1.RELEASE/reference/html/repositories.html
  */
-
-public interface HolderDAO extends MongoRepository<Holder, String>{
-    
-    List<Holder> findByState(boolean state);
+public interface PersonDAO extends MongoRepository<Person, String>{
+    Person findFirstByName(String name);
 }

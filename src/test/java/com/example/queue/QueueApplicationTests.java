@@ -1,6 +1,6 @@
 package com.example.queue;
 
-import com.example.queue.Services.HolderService;
+import com.example.queue.Services.QueueService;
 import org.junit.FixMethodOrder;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -23,7 +23,7 @@ public class QueueApplicationTests {
     @Autowired
     private MockMvc mockMvc;
     @Autowired
-    private HolderService holderService;
+    private QueueService holderService;
 	@Test
 	public void a_pollAllQueue() throws Exception{
             for(int i=0;i<holderService.getQueue().size();i++){

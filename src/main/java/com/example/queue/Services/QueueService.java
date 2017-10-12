@@ -6,7 +6,9 @@
 package com.example.queue.Services;
 
 import com.example.queue.DAO.HolderDAO;
+import com.example.queue.DAO.PersonDAO;
 import com.example.queue.Models.Holder;
+import com.example.queue.Models.Person;
 import java.util.concurrent.ConcurrentLinkedQueue;
 import javax.annotation.PostConstruct;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -17,9 +19,11 @@ import org.springframework.stereotype.Service;
  * @author Mariano
  */
 @Service
-public class HolderService {
+public class QueueService {
     @Autowired
     private HolderDAO holderDAO;
+    @Autowired
+    private PersonDAO personDAO;
     private ConcurrentLinkedQueue<Holder> queue = new ConcurrentLinkedQueue<>();
     
     @PostConstruct
@@ -36,17 +40,19 @@ public class HolderService {
             }).start();
         }
     }
+    public ConcurrentLinkedQueue<Holder> getQueue() {return queue;}
+    
     public boolean add(Holder h){
         return this.getQueue().add(this.holderDAO.save(h));
     }
-    public Holder poll(){
+    public Holder poll(String name){
         Holder h =  this.getQueue().poll();
         h.setState(true);
+        Person p = personDAO.findFirstByName(name);
+        if(p==null){
+            p = personDAO.save(new Person(name));
+        }
+        h.setPerson(p);
         return this.holderDAO.save(h);
-    }
-    public ConcurrentLinkedQueue<Holder> getQueue() {return queue;}
-    
-    public Iterable<Holder> findAll(){return this.holderDAO.findAll();}
-    
-       
+    }   
 }
