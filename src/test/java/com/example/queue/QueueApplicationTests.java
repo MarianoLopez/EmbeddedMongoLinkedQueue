@@ -27,7 +27,7 @@ public class QueueApplicationTests {
 	@Test
 	public void a_pollAllQueue() throws Exception{
             for(int i=0;i<holderService.getQueue().size();i++){
-               mockMvc.perform(get("/"))
+               mockMvc.perform(get("/poll"))
                     .andDo(print())
                     .andExpect(status().isOk())
                     .andExpect(content().contentType("application/json;charset=UTF-8"));
@@ -36,7 +36,7 @@ public class QueueApplicationTests {
         
         @Test
 	public void b_pollQueue() throws Exception{
-             mockMvc.perform(get("/"))
+             mockMvc.perform(get("/poll"))
                     .andDo(print())
                     .andExpect(status().isOk())
                     .andExpect(content().json("{}"));
