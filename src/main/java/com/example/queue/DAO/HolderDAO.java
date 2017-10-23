@@ -14,6 +14,7 @@ import org.springframework.data.mongodb.repository.MongoRepository;
  *
  * @author Mariano
   https://docs.spring.io/spring-data/data-commons/docs/1.6.1.RELEASE/reference/html/repositories.html
+  https://docs.spring.io/spring-data/mongodb/docs/current/reference/html/
  */
 
 public interface HolderDAO extends MongoRepository<Holder, String>{

@@ -31,6 +31,7 @@ public class QueueApplicationTests {
                     .andDo(print())
                     .andExpect(status().isOk())
                     .andExpect(content().contentType("application/json;charset=UTF-8"));
+                System.out.println("index: "+i);
             }
 	}
         

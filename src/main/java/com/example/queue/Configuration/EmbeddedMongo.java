@@ -25,7 +25,12 @@ import de.flapdoodle.embed.mongo.MongodStarter;
 import de.flapdoodle.embed.mongo.config.IMongodConfig;
 import de.flapdoodle.embed.mongo.config.MongodConfigBuilder;
 import de.flapdoodle.embed.mongo.config.Net;
+import de.flapdoodle.embed.mongo.config.Storage;
 import de.flapdoodle.embed.mongo.distribution.Version;
+import java.io.File;
+import java.nio.file.Files;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import org.springframework.beans.factory.annotation.Value;
 /**
  *
@@ -37,6 +42,8 @@ public class EmbeddedMongo {
     private String MONGO_DB_URL;
     @Value("${mongo.db.port}")
     private String MONGO_DB_PORT;
+    @Value("${mongo.db.dirPath}")
+    private String MONGO_DB_DIRPATH;
 
     MongodStarter starter = MongodStarter.getDefaultInstance();
     MongodExecutable mongodExecutable;
@@ -55,9 +62,22 @@ public class EmbeddedMongo {
 
     @PostConstruct
     public void construct() throws UnknownHostException, IOException {
-        IMongodConfig mongodConfig = new MongodConfigBuilder().version(Version.Main.PRODUCTION).net(new Net(MONGO_DB_URL, Integer.valueOf(MONGO_DB_PORT), true)).build();
+        deleteLock();
+        IMongodConfig mongodConfig = new MongodConfigBuilder()
+                .version(Version.Main.PRODUCTION)
+                .replication(new Storage(MONGO_DB_DIRPATH, null, 0))
+                .net(new Net(MONGO_DB_URL, Integer.valueOf(MONGO_DB_PORT), true))
+                .build();
         mongodExecutable = starter.prepare(mongodConfig);
         MongodProcess mongod = mongodExecutable.start();
+    }
+    
+    private void deleteLock(){
+        try {
+            Files.deleteIfExists(new File(MONGO_DB_DIRPATH+"\\mongod.lock").toPath());
+        } catch (IOException ex) {
+            Logger.getLogger(EmbeddedMongo.class.getName()).log(Level.SEVERE, null, ex);
+        }
     }
 
     @PreDestroy

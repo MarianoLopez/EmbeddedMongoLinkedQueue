@@ -29,6 +29,10 @@ public class QueueService {
     @PostConstruct
     private void initQueue(){
         this.holderDAO.findByState(false).forEach(queue::add);//add from db with state false
+        //fakeData();
+        
+    }
+    private void fakeData(){
         for(int i=0;i<2;i++){
             new Thread(() -> {
                 long threadId = Thread.currentThread().getId();

@@ -28,13 +28,8 @@ public class Main {
     private HolderDAO holderDAO;
     @Autowired
     private PersonDAO personDAO;
-    //from db
-    @GetMapping()
-    public Iterable<Holder> getAll(){
-        return this.holderDAO.findAll();
-    }
     //from queue
-    @GetMapping("queue")
+    @GetMapping()
     public ConcurrentLinkedQueue<Holder> getQueue(){
         return this.queueService.getQueue();
     }
@@ -42,6 +37,12 @@ public class Main {
     @GetMapping("poll")
     public Holder get(@RequestParam(value = "name", required = false, defaultValue = "Test")String name){
         return this.queueService.poll(name);
+    }
+    
+    //from db
+    @GetMapping("holder")
+    public Iterable<Holder> getAll(){
+        return this.holderDAO.findAll();
     }
     //from db
     @GetMapping("persons")
